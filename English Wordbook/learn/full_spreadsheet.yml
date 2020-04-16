@@ -1,0 +1,341 @@
+---
+- - unconventional
+  - нетрадиционный
+- - smooth
+  - гладкий; плавный
+- - obligatory
+  - обязательное
+- - willful
+  - преднамеренный
+- - eccentricity
+  - эксцентричность
+- - restricted
+  - ограниченный
+- - obsessively
+  - одержимо
+- - precisely
+  - точно
+- - executed
+  - выполненный
+- - arbitrary
+  - произвольный
+- - appropriate
+  - подходящее
+- - deliberately
+  - сознательно
+- - generally
+  - вообще
+- - explicitly
+  - ясно; точно; открыто
+- - property
+  - свойство
+- - reference
+  - ссылка; упоминание
+- - accessor
+  - объект; использующий ресурс
+- - derived
+  - полученный
+- - meaningful
+  - значимое
+- - incrementing
+  - приращение; увелечение
+- - permissible
+  - допустимый
+- - preferable
+  - предпочтительный
+- - clarity
+  - ясность
+- - spanning
+  - охват
+- - adjacent
+  - примыкающий; смежный; соседний
+- - straightforward
+  - идейно простой; не вызывающий затруднений; движущийся или ведущий прямо вперёд
+- - terseness
+  - краткость
+- - respectively
+  - соответственно
+- - merit
+  - заслуга; достоинство
+- - pitfalls
+  - подводные камни
+- - hazards
+  - опасность
+- - stepping stone
+  - ступенька
+- - naming convention
+  - соглашение об именовании
+- - parenthes
+  - круглые скобки
+- - ambiguity
+  - неоднозначность неясность
+- - decade
+  - десятилетие
+- - lack
+  - отсутствие
+- - adopting
+  - принятие
+- - preach
+  - проповедовать
+- - accompanied
+  - в сопровождении
+- - sequence
+  - последовательность
+- - approach
+  - подход
+- - prompt
+  - подсказка
+- - line feed
+  - перевод строки
+- - embedded evaluation
+  - встроенная оценка
+- - curly brackets
+  - фигурные скобки
+- - exception
+  - исключение
+- - instance variable
+  - переменная экземпляра
+- - descendant
+  - потомок
+- - representation
+  - представление
+- - ancestor
+  - предок
+- - inheriting features
+  - наследующие признаки
+- - descendant classes
+  - классы потомков
+- - accomplishing
+  - достижения
+- - colon
+  - двоеточие
+- - outset
+  - начало
+- - hexadecimal
+  - шестнадцатеричный
+- - circumstances
+  - обстоятельства
+- - equality
+  - равенство
+- - consequences
+  - последствия
+- - to precede
+  - предшествовать
+- - bother
+  - беспокоить
+- - occasion
+  - случай
+- - assigns
+  - присваивать
+- - assume
+  - предпологать
+- - persuade
+  - уговаривать
+- - anticipate
+  - предвидеть
+- - to leap
+  - прыгнуть
+- - clarify
+  - уточнить прояснить
+- - refer
+  - обращаться
+- - prompts
+  - наводит
+- - omit
+  - опустить
+- - tend
+  - иметь тенденцию
+- - poke
+  - тыкать
+- - mess around
+  - возиться
+- - rigorously enforced
+  - строго соблюдается
+- - initially appears
+  - изначально появляется
+- - despite
+  - несмотря на
+- - inherit
+  - унаследуют
+- - descend
+  - передаваться по наследству
+- - distinguished
+  - отличается
+- - to ensure
+  - для обеспечения
+- - deserve
+  - заслуживать
+- - to tuck away
+  - убрать
+- - consider
+  - рассматривать
+- - concatenate
+  - сцеплять; связывать
+- - append
+  - "прибавлять; добавлять; \nприсоединять"
+- - yield
+  - уступать
+- - nest
+  - вставлять
+- - determine
+  - определить
+- - the plain fact of the matter
+  - очевидный факт
+- - in most respects
+  - в большинстве случаев
+- - however
+  - тем не мение
+- - as far as i'm concerned
+  - насколько я понимаю
+- - for more on this
+  - подробнее об этом
+- - occasionally
+  - время от времени
+- - although
+  - хотя
+- - incidentally
+  - между прочим
+- - end up with
+  - в конечном итоге
+- - 'never end up with '
+  - никогда не заканчивать с
+- - it makes sense
+  - это имеет смысл
+- - in which case
+  - в таком случае
+- - for instance
+  - например
+- - cannot be directly accessed
+  - недоступен напрямую
+- - accessor methods
+  - методы доступа
+- - symbol
+  - условное обозначение
+- - even though
+  - даже если
+- - whereas
+  - в то время как
+- - the inspect method
+  - метод проверки
+- - sake of clarity
+  - ради ясности
+- - inward-pointing
+  - внутрь указывающего
+- - toward
+  - к; в направлении
+- - in doubt
+  - в сомнениях
+- - suffice to say
+  - достаточно сказать
+- - whether
+  - будь то
+- - ordering of elements
+  - упорядочение элементов
+- - vital
+  - жизненно необходимо
+- - examine
+  - исследовать; рассматривать
+- - invoke
+  - призывать
+- - nefarious
+  - бесчестный
+- - otherwise
+  - в противном случае; иначе
+- - occur
+  - происходить; иметь место
+- - intend
+  - намереваться; предназначать; подразумевать
+- - certain
+  - определенный
+- - imposing
+  - навязывая
+- - distinction
+  - различие
+- - relying on
+  - полагаясь на
+- - undesirable
+  - нежелательный
+- - impatient
+  - нетерпеливый
+- - inefficient
+  - неэффективный
+- - unexpected side effect
+  - неожиданный побочный эффект
+- - encounter
+  - столкнуться
+- - unforeseen
+  - непредвиденные
+- - assumption
+  - предположение
+- - obscure
+  - смутный; неясный
+- - exception handling
+  - обработка исключений
+- - erroneous
+  - ошибочное
+- - summarize
+  - обобщать; резюмировать
+- - catchall
+  - всеохватывающий
+- - clause
+  - пункт
+- - particular
+  - специфический; особый
+- - transient
+  - преходящий; временный
+- - consistently
+  - последовательно
+- - regard
+  - рассматривать
+- - pretty darn ugly
+  - чертовски ужасно
+- - notably
+  - в частности
+- - with a bit of thought
+  - с небольшим количеством мысли
+- - to iterate over
+  - перебирать
+- - cahoot
+  - соучастие
+- - within the scope
+  - в рамках области
+- - precedence
+  - приоритет
+- - misconception
+  - неправильное представление
+- - occurrence
+  - вхождение
+- - immediate
+  - непосредственный; немедленный
+- - an impenetrable network
+  - непробиваемая сеть
+- - nevertheless
+  - тем не менее
+- - to posse
+  - обладать
+- - path
+  - путь
+- - to traverse
+  - 'пройти '
+- - stream
+  - поток
+- - truncate
+  - обрезать
+- - serialization
+  - серелизация; публикая по частям
+- - subsequently
+  - 'впоследствии '
+- - anticipate
+  - ожидать
+- - probability
+  - вероятность
+- - jumbled
+  - перемешанный
+- - gratuitous
+  - беспричинный
+- - 'suspend '
+  - приостановить
+- - simultaneously
+  - одновременно
+- - semaphore
+  - ручная сигнализация
