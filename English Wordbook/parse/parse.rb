@@ -1,3 +1,5 @@
+include MyData
+include Menu
 def parse
   require 'bundler'
   Bundler.require
@@ -21,9 +23,9 @@ def parse
                             }
                         }
   # saving to yaml
-  saveDB($full_spreadsheet, working_array)
+  MyData.to_save($full_spreadsheet, working_array)
     puts("Data was successfully saved to a local source. #{Dir.glob($full_spreadsheet)}")
     puts("Returning to main menu...")
     sleep(5)
-    main_menu
+    Menu.main
 end
