@@ -59,7 +59,7 @@ module Spreadsheet
     puts('Returning to main menu...')
     sleep(3)
     Screen.clear
-    Menu.main
+    Main.menu
   end
 end
 
@@ -103,6 +103,7 @@ module Main
     end
   end
 end
+Main.menu if !(File.exist?($full_list))
 
 module Learn
 
@@ -123,7 +124,7 @@ module Learn
 
   def self.create_new
       # def array to learn
-      list_to_learn = []
+      list_to_learn = [[0]]
       # loading all words to array from local source
       full_list = MyData.to_load($full_list)
       print("Enter what amount of words do u want to add to a new list: ")
@@ -142,7 +143,7 @@ module Learn
       MyData.to_save($full_list, full_list)
       MyData.to_save($in_learning, list_to_learn)
       # adding idicator of learning progress (must be 3 for learning complete)
-      list_to_learn.unshift(0)
+
       puts("New list was created, full list was modified...")
       Learn.sub_menu(list_to_learn)
   end
@@ -151,7 +152,7 @@ module Learn
   def self.sub_menu(list_to_learn)
     Screen.clear
     menu = Main::Menu.new(
-      "Start lesson ##{list_to_learn[0]+1}",
+      "Start lesson ##{list_to_learn[0][0].to_i+1}",
       "View a list of words in a lesson",
       "Return to previous menu",
       "Return to main menu"
@@ -169,18 +170,36 @@ module Learn
 
   module Start
     $list_to_learn = []
+    # copy of list to pass it to local source after learning, no manipulations
+    # with this array will be
     $copy_of_list_to_learn = []
+
+    @@steps_for_loop = 0
+    @@faults = 0
+    # uploading array from local source
+    @@full_list = MyData.to_load($full_list)
+    # instance variable for words selection for the second exercise
+    @@passed = ['test']
+    # getting an iterator for exercise based on the number
+    # of word remaining(passed examination)
     def self.start_learning(list_to_learn)
       $list_to_learn = list_to_learn
       $copy_of_list_to_learn = list_to_learn
-
+      p $list_to_learn
+      while (($list_to_learn.length != 1 ) && (@@passed != []))
+        @@passed = [] if @@passed[0] == 'test'
+        puts("Loop stated")
         Learn::Start.get_steps
         Learn::Start.demonstrate
         Learn::Start.picking_exercise
         Learn::Start.writting_exercise
-
-
+      end
+      if @@faults < $copy_of_list_to_learn.length
+        puts("Congratulations, you passed this lesson.")
+        
     end
+
+
 
     def self.view_list(list_to_learn)
       Screen.clear
@@ -191,14 +210,7 @@ module Learn
       Learn.sub_menu(list_to_learn)
     end
 
-    @@steps_for_loop = 0
-    @@faults = 0
-    # uploading array from local source
-    @@full_list = MyData.to_load($full_list)
-    # instance variable for words selection for the second exercise
-    @@passed = []
-    # getting an iterator for exercise based on the number
-    # of word remaining(passed examination)
+
     def self.get_steps
       $list_to_learn.length >= 5 ? @@steps_for_loop = 5 : @@steps_for_loop = $list_to_learn.length-1
     end
@@ -218,7 +230,7 @@ module Learn
     def self.variants_shuffle(correct)
       variants = [correct[1]]
       for i in 1..3
-        variants << @@full_list[rand(@@full_list.length-1)[1]]
+        variants << @@full_list[rand(@@full_list.length-1)][1]
       end
       return variants.shuffle
     end
@@ -226,8 +238,8 @@ module Learn
     # choose correct words from the list of variants
     def self.picking_exercise
 
-      for i in 1..@steps_for_loop
-        Screen.clear
+      for i in 1..@@steps_for_loop
+        # Screen.clear
         variants = Learn::Start.variants_shuffle($list_to_learn[i])
         puts("Correct translation of the word '#{$list_to_learn[i][0]}' is: ")
         variants.each_with_index{|str,index|
@@ -236,11 +248,12 @@ module Learn
         puts("-------------")
         printf("Your answer: ")
         answer = gets().chomp().to_i
-        if variants[answer] == $list_to_learn[i][1]
+        if variants[answer - 1] == $list_to_learn[i][1]
           puts("It is correct answer. Going next?")
           @@passed << $list_to_learn[i]
-          $list_to_learn = nil
+          $list_to_learn[i] = nil
           enter = gets().chomp()
+          puts("next.")
         else
           puts("It's wrong answer. \n#{$list_to_learn[i][0]} ===> #{$list_to_learn[i][1]}")
           @@faults += 1
@@ -283,6 +296,5 @@ end
 module Repeat
 end
 
-
-# starts program
 Main.menu
+# starts program
