@@ -33,8 +33,8 @@ module MyData
 end
 
 module Spreadsheet
-  # parsing google spreadsheet
-  def self.load_full_list
+
+  def self.login
     require 'bundler'
     Bundler.require
 
@@ -45,7 +45,13 @@ module Spreadsheet
     spreadsheet = session.spreadsheet_by_title('Ruby voc')
     # Get the first worksheet
     worksheet = spreadsheet.worksheets.first
-    # Print out the first 6 columns of each row
+  end
+
+
+  # parsing google spreadsheet
+  def self.load_full_list
+    worksheet = Spreadsheet.login
+
     working_array = worksheet.rows
     working_array = working_array.map do |row|
       row.map do |column|
@@ -60,6 +66,11 @@ module Spreadsheet
     sleep(3)
     Screen.clear
     Main.menu
+  end
+
+
+  def self.insert_learned_list
+    worksheet = Spreadsheet.login
   end
 end
 
@@ -103,7 +114,6 @@ module Main
     end
   end
 end
-Main.menu if !(File.exist?($full_list))
 
 module Learn
 
@@ -117,7 +127,7 @@ module Learn
 
     case answer
     when 1 then Learn.create_new
-    when 2 then puts("continue")
+    when 2 then Learn.continue
     when 3 then Main.menu
     end
   end
@@ -148,6 +158,9 @@ module Learn
       Learn.sub_menu(list_to_learn)
   end
 
+  def self.continue
+
+  end
   # generall menu for whole learning process
   def self.sub_menu(list_to_learn)
     Screen.clear
@@ -168,6 +181,7 @@ module Learn
     end
   end
 
+# learning module, need to pass array of words
   module Start
     $list_to_learn = []
     # copy of list to pass it to local source after learning, no manipulations
@@ -185,7 +199,7 @@ module Learn
     def self.start_learning(list_to_learn)
       $list_to_learn = list_to_learn
       $copy_of_list_to_learn = list_to_learn
-      p $list_to_learn
+      p $copy_of_list_to_learn[0][0]
       while (($list_to_learn.length != 1 ) && (@@passed != []))
         @@passed = [] if @@passed[0] == 'test'
         puts("Loop stated")
@@ -196,7 +210,20 @@ module Learn
       end
       if @@faults < $copy_of_list_to_learn.length
         puts("Congratulations, you passed this lesson.")
-        
+        puts("Returning to main menu.")
+        $copy_of_list_to_learn[0][0] += 1
+        Main.menu
+
+        if $copy_of_list_to_learn[0][0] == 2
+          puts("You have completed learning the list of these words. ")
+          puts("Saving progress... Returning to main menu")
+          MyData.to_save($learned, $copy_of_list_to_learn)
+          Main.menu
+
+        end
+
+      end
+
     end
 
 
@@ -288,7 +315,7 @@ module Learn
       @@passed.compact!
     end
 
-  end
+    end
 
 
 end
@@ -297,4 +324,3 @@ module Repeat
 end
 
 Main.menu
-# starts program
