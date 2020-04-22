@@ -1,12 +1,41 @@
 # frozen_string_literal: true
 
 require 'yaml'
+
 # file name for keeping full list of words from spreadsheet
 $full_list = 'full_list.yml'
 # file name for keeping list of words that u are currently studying
 $in_learning = 'in_learning.yml'
 # file name for keeping list of words that were learned
 $learned = 'learned.yml'
+
+module MyData
+
+  def self.to_save(filename, output_array)
+    mode = 'r' if filename == $learned
+    mode = 'w' if filename == $full_list || filename == $in_learning
+    File.open(filename, mode) do |f|
+      f.write(output_array.to_yaml)
+    end
+  end
+  # loads first list in yaml file
+  def self.to_load(filename)
+    output_data = File.read(filename)
+    output_data = YAML.safe_load(output_data)
+  end
+  # loads whole yml and passes it to array to return
+  def self.to_load_array(filename)
+    return_arr = []
+    File.open(filename){|f|
+    YAML.load_stream(f){|doc|
+      return_arr << doc
+      }
+    }
+    return_arr
+  end
+end
+
+
 
 # module for clearing terminal screen
 module Screen
@@ -16,22 +45,6 @@ module Screen
 end
 
 # module for manipulations with data
-module MyData
-  def self.to_load(filename)
-    output_data = File.read(filename)
-    output_data = YAML.safe_load(output_data)
-  end
-
-  def self.to_save(filename, output_array)
-    mode = 'a+' if filename == $in_learning
-    mode = 'r' if filename == $learned
-    mode = 'w' if filename == $full_list
-    File.open(filename, mode) do |f|
-      f.write(output_array.to_yaml)
-    end
-  end
-end
-
 module Spreadsheet
 
   def self.login
@@ -74,6 +87,7 @@ module Spreadsheet
   end
 end
 
+
 module Main
   # class for menu generation
   class Menu
@@ -86,7 +100,7 @@ module Main
 
     # print menu
     def get_menu_choice
-      Screen.clear
+
       @menu_items.each_with_index do |item, index|
         puts("#{index + 1}. #{item}")
       end
@@ -97,7 +111,7 @@ module Main
   end
 
   def self.menu
-    # Parsing spreadsheet to local source
+    # Parsing spreadsheet to local source if it is first start
     Spreadsheet.load_full_list unless File.exist?($full_list)
     # creates main menu with Menu class
     menu = Main::Menu.new(
@@ -108,219 +122,11 @@ module Main
     answer = menu.get_menu_choice
 
     case answer
-    when 1 then Learn.learn_menu
+    when 1 then require './subMenu.rb' ; load('./subMenu.rb') ; Learn.learn_menu
     when 2 then puts('Repeating')
-    when 3 then nil
+    when 3 then return
     end
   end
-end
-
-module Learn
-
-  def self.learn_menu
-    menu = Main::Menu.new(
-        'Create new list of words to learn',
-        'Continue to learn already created list of words',
-        'Return to main menu'
-    )
-    answer = menu.get_menu_choice
-
-    case answer
-    when 1 then Learn.create_new
-    when 2 then Learn.continue
-    when 3 then Main.menu
-    end
-  end
-
-  def self.create_new
-      # def array to learn
-      list_to_learn = [[0]]
-      # loading all words to array from local source
-      full_list = MyData.to_load($full_list)
-      print("Enter what amount of words do u want to add to a new list: ")
-      answer = gets().chomp().to_i
-      if answer > 25
-        puts("You can't add to list more, than 25 words")
-        Learn.create_new
-      end
-      # getting random array of strings from full_list array
-      for i in 1..answer
-        random_number = rand(full_list.length-1)
-        list_to_learn << full_list[random_number]
-        full_list.delete_at(random_number)
-      end
-      # saving modified full list and learning list
-      MyData.to_save($full_list, full_list)
-      MyData.to_save($in_learning, list_to_learn)
-      # adding idicator of learning progress (must be 3 for learning complete)
-
-      puts("New list was created, full list was modified...")
-      Learn.sub_menu(list_to_learn)
-  end
-
-  def self.continue
-
-  end
-  # generall menu for whole learning process
-  def self.sub_menu(list_to_learn)
-    Screen.clear
-    menu = Main::Menu.new(
-      "Start lesson ##{list_to_learn[0][0].to_i+1}",
-      "View a list of words in a lesson",
-      "Return to previous menu",
-      "Return to main menu"
-    )
-
-    answer = menu.get_menu_choice
-
-    case answer
-    when 1 then Learn::Start.start_learning(list_to_learn)
-    when 2 then Learn::Start.view_list(list_to_learn)
-    when 3 then Learn.learn_menu
-    when 4 then Main.menu
-    end
-  end
-
-# learning module, need to pass array of words
-  module Start
-    $list_to_learn = []
-    # copy of list to pass it to local source after learning, no manipulations
-    # with this array will be
-    $copy_of_list_to_learn = []
-
-    @@steps_for_loop = 0
-    @@faults = 0
-    # uploading array from local source
-    @@full_list = MyData.to_load($full_list)
-    # instance variable for words selection for the second exercise
-    @@passed = ['test']
-    # getting an iterator for exercise based on the number
-    # of word remaining(passed examination)
-    def self.start_learning(list_to_learn)
-      $list_to_learn = list_to_learn
-      $copy_of_list_to_learn = list_to_learn
-      p $copy_of_list_to_learn[0][0]
-      while (($list_to_learn.length != 1 ) && (@@passed != []))
-        @@passed = [] if @@passed[0] == 'test'
-        puts("Loop stated")
-        Learn::Start.get_steps
-        Learn::Start.demonstrate
-        Learn::Start.picking_exercise
-        Learn::Start.writting_exercise
-      end
-      if @@faults < $copy_of_list_to_learn.length
-        puts("Congratulations, you passed this lesson.")
-        puts("Returning to main menu.")
-        $copy_of_list_to_learn[0][0] += 1
-        Main.menu
-
-        if $copy_of_list_to_learn[0][0] == 2
-          puts("You have completed learning the list of these words. ")
-          puts("Saving progress... Returning to main menu")
-          MyData.to_save($learned, $copy_of_list_to_learn)
-          Main.menu
-
-        end
-
-      end
-
-    end
-
-
-
-    def self.view_list(list_to_learn)
-      Screen.clear
-      puts("Here is a list of words from this lesson:")
-      list_to_learn.each { |array| puts("#{array[0]} ====> #{array[1]}\n") }
-      print("Press 'enter' to return back to previous menu...")
-      answer = gets().chomp()
-      Learn.sub_menu(list_to_learn)
-    end
-
-
-    def self.get_steps
-      $list_to_learn.length >= 5 ? @@steps_for_loop = 5 : @@steps_for_loop = $list_to_learn.length-1
-    end
-    # demonstration of words
-    def self.demonstrate
-      for i in 1..@@steps_for_loop
-        Screen.clear
-        puts("#{$list_to_learn[i][0]} ===> #{$list_to_learn[i][1]}")
-        puts("Press enter to continue...")
-        answer = gets().chomp()
-      end
-    end
-
-    # gets and shuffle position of correct variant with incorrect
-    # for picking exercise
-
-    def self.variants_shuffle(correct)
-      variants = [correct[1]]
-      for i in 1..3
-        variants << @@full_list[rand(@@full_list.length-1)][1]
-      end
-      return variants.shuffle
-    end
-
-    # choose correct words from the list of variants
-    def self.picking_exercise
-
-      for i in 1..@@steps_for_loop
-        # Screen.clear
-        variants = Learn::Start.variants_shuffle($list_to_learn[i])
-        puts("Correct translation of the word '#{$list_to_learn[i][0]}' is: ")
-        variants.each_with_index{|str,index|
-                  print("#{index+1}) #{str}") ; index.even? ? print(" | ") : print("\n")
-                }
-        puts("-------------")
-        printf("Your answer: ")
-        answer = gets().chomp().to_i
-        if variants[answer - 1] == $list_to_learn[i][1]
-          puts("It is correct answer. Going next?")
-          @@passed << $list_to_learn[i]
-          $list_to_learn[i] = nil
-          enter = gets().chomp()
-          puts("next.")
-        else
-          puts("It's wrong answer. \n#{$list_to_learn[i][0]} ===> #{$list_to_learn[i][1]}")
-          @@faults += 1
-          puts("Faults = #{@@faults}")
-          enter = gets().chomp()
-        end
-      end
-     $list_to_learn.compact!
-    end
-
-    # write the word appropriate to the translation
-    def self.writting_exercise
-      @@passed.shuffle
-      if @@passed.length >= 3
-        for i in 0..@@passed.length-3
-          Screen.clear
-          puts("Write the translation of the word '#{@@passed[i][1]}' ")
-          print("Your answer: ")
-          answer = gets().chomp()
-          if answer == @@passed[i][0]
-            puts("It's correct answer. Going next?(press enter)")
-            @@passed[i] = nil
-            enter = gets().chomp()
-          else
-            puts("It's wrong answer.\n#{@@passed[i][0]} ===> #{@@passed[i][1]}")
-            @@faults += 1
-            puts("Faults = #{@@faults}")
-            enter = gets().chomp()
-          end
-        end
-      end
-      @@passed.compact!
-    end
-
-    end
-
-
-end
-
-module Repeat
 end
 
 Main.menu
