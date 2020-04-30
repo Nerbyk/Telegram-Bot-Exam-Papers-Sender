@@ -9,8 +9,8 @@ Dotenv.load('./.env') # to get admin user_id
 class MessageResponder
   attr_reader :bot, :message, :my_text
   def call(bot:, message:)
-    @bot     = bot
-    @message = message
+    @bot        = bot
+    @message    = message
     @my_text    = GetMessageText.new
     respond(message.from.id)
   end

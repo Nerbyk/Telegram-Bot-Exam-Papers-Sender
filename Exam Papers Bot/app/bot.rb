@@ -2,8 +2,8 @@
 
 require 'telegram/bot'
 require 'dotenv'
-require './messages/responder.rb'
-require './messages/button.rb'
+require './app/messages/responder.rb'
+require './app/messages/button.rb'
 Dotenv.load('./.env')
 
 Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
