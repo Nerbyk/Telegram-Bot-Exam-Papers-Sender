@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeInlineMarkup
   def initialize(*inline_items)
     @inline_items = inline_items

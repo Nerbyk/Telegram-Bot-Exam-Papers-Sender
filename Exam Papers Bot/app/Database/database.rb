@@ -28,7 +28,9 @@ class Database
 
   def verificate
     dataset.each do |row|
-      return row.values[6] if row.values[1] == id && row.values[6] == 'in progress'
+      if row.values[1] == id && row.values[6] == 'in progress'
+        return row.values[6]
+      end
       return row.values[6] if row.values[1] == id && row.values[6] == 'accepted'
     end
     false
@@ -37,5 +39,4 @@ class Database
   def make_record(user_data)
     dataset.insert(user_id: user_data[0], name: user_data[1], link: user_data[2], subjects: user_data[3], image: user_data[4], status: user_data[5])
   end
-
 end

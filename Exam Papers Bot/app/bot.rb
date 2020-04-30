@@ -10,11 +10,11 @@ Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
   bot.listen do |message|
     case message
     when Telegram::Bot::Types::Message
-    message_responder = MessageResponder.new
-    message_responder.call(bot: bot, message: message)
+      message_responder = MessageResponder.new
+      message_responder.call(bot: bot, message: message)
     when Telegram::Bot::Types::CallbackQuery
-    message_button = MessageButton.new
-    message_button.call(bot: bot, message: message)
+      message_button = MessageButton.new
+      message_button.call(bot: bot, message: message)
     end
   end
 end
