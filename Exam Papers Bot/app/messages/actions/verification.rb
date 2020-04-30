@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './app/Database/database.rb'
+require './Database/database.rb'
 class Verification
   attr_reader :client_id
   def call(client_id:)

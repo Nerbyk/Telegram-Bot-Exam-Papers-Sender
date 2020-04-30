@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require './app/messages/actions/get_message_text.rb'
-
+require './messages/actions/get_message_text.rb'
+require './messages/request/get_user_info.rb'
 class MessageButton < MessageResponder
   attr_reader :bot, :message, :my_text
   def call(bot:, message:)
@@ -11,7 +11,8 @@ class MessageButton < MessageResponder
   def respond(_client_id)
     if message.data == 'Start'
       edit_buttoned_text(my_text.reply('greeting_first_time_user'))
-
+      get_user_info = GetUserInfo.new
+      get_user_info.call(bot: bot, message: message)
     end
   end
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require './app/messages/actions/verification.rb'
-require './app/messages/actions/get_message_text.rb'
-require './app/messages/actions/inline_markup.rb'
+require './messages/actions/verification.rb'
+require './messages/actions/get_message_text.rb'
+require './messages/actions/inline_markup.rb'
 require 'dotenv'
 Dotenv.load('./.env') # to get admin user_id
 
