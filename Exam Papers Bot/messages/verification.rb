@@ -1,5 +1,5 @@
 
-
+require './Database/database.rb'
 class Verification
   attr_reader :client_id
   def call(client_id: )
@@ -7,8 +7,8 @@ class Verification
     check
   end
 
-  def check 
-
+  def check
+    Database.new(id: client_id).verificate
   end
 
 end

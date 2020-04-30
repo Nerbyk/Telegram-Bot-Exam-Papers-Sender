@@ -5,7 +5,7 @@ class GetMessageText
   attr_reader :client, :replies_list
   def initialize(client: 'user')
     @client         = client
-    @replies_list   = YAML.load(File.read(client + '_messages.yml'))
+    @replies_list   = YAML.load(File.read('./messages/messages_examples/'+ client + '_messages.yml'))
   end
 
   def reply(case_text)
@@ -13,9 +13,9 @@ class GetMessageText
   end
 
 end
-
-text = GetMessageText.new()
-p text.reply('greeting_first_time_user')
+#
+# text = GetMessageText.new()
+# p text.reply('greeting_first_time_user')
 
 
 
