@@ -6,8 +6,8 @@ require './Database/database.rb'
 require './messages/responder.rb'
 
 class MessageButton < MessageResponder
-  attr_reader :bot, :message, :my_text
-  def call(bot:, message:)
+  attr_reader :bot, :message, :user_input, :my_text
+  def call(bot:, message:, user_input:)
     super
   end
 
