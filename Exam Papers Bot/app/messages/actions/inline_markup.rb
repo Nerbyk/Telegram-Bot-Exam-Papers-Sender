@@ -26,6 +26,10 @@ class MakeInlineMarkup
 
   def get_board
     markup = []
-    markup = Telegram::Bot::Types::ReplyKyboardMarkup.new(keyboard: @inline_items)
+    markup = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: @inline_items)
+  end
+
+  def delete_board
+    markup = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
   end
 end
