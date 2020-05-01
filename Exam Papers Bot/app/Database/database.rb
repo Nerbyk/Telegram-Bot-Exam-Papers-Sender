@@ -27,30 +27,56 @@ class Database
   end
 
   def registrate
-    p verificate
     dataset.insert(user_id: id, status: status) if !verificate
    puts("already registred") if verificate
   end
 
   def verificate
     dataset.each do |row|
-      p row
       return row.values[6] if row.values[1] == id && row.values[6] == 'in progress'
       return row.values[6] if row.values[1] == id && row.values[6] == 'accepted'
       return row.values[6] if row.values[1] == id && row.values[6] == 'registered'
       return row.values[6] if row.values[1] == id && row.values[6] == 'name'
       return row.values[6] if row.values[1] == id && row.values[6] == 'link'
+      return row.values[6] if row.values[1] == id && row.values[6] == 'subjects'
+      return row.values[6] if row.values[1] == id && row.values[6] == 'photo'
       return true if row.values[1] == id && row.values[6] == nil
     end
     false
   end
 
-  def make_record(user_data)
-    dataset.insert(user_id: user_data[0], name: user_data[1], link: user_data[2], subjects: user_data[3], image: user_data[4], status: user_data[5])
+  def update_data(name: nil, link: nil, photo: nil)
+    dataset.filter(user_id: id).update(:status => status)
+    dataset.filter(user_id: id).update(:name => name) if name != nil
+    dataset.filter(user_id: id).update(:link => link) if link != nil
+    dataset.filter(user_id: id).update(:image => photo) if photo != nil
   end
 
-  def update_status
-    dataset.filter(user_id: id).update(:status => status)
+  def set_subjects(subjects:)
+    arr = []
+    dataset.each do |row|
+      arr << row.values[4] if row.values[1] == id && row.values[4] != nil
+    end
+    arr << subjects
+    dataset.filter(user_id: id).update(:subjects => arr.join(' '))
+  end
+
+  def get_subjects
+    arr = String.new
+    dataset.each do |row|
+      arr = row.values[4] if row.values[1] == id
+    end
+    return arr.split(' ')
+  end
+
+  def del_subjects
+    dataset.filter(user_id: id).update(:subjects => nil)
+  end
+
+  def get_request
+    dataset.each do |row|
+      return row if row.values[1] == id
+    end
   end
 
 end
