@@ -3,28 +3,39 @@
 require './messages/actions/verification.rb'
 require './messages/actions/get_message_text.rb'
 require './messages/actions/inline_markup.rb'
+require './messages/request_methods.rb'
+require './messages/actions/check_input.rb'
+require './Database/database.rb'
 require 'dotenv'
 Dotenv.load('./.env') # to get admin user_id
 
 class MessageResponder
-  attr_reader :bot, :message, :my_text
+  attr_reader :bot, :message, :my_text, :client_id, :verification, :user_input
+  include RequestMethods
   def call(bot:, message:)
-    @bot        = bot
-    @message    = message
-    @my_text    = GetMessageText.new
-    respond(message.from.id)
+    @bot          = bot
+    @message      = message
+    @my_text      = GetMessageText.new
+    @client_id    = message.from.id
+    @verification = Verification.new.call(client_id: client_id)
+    respond(client_id)
   end
 
   def respond(client_id)
     #  if client_id != ENV['ADMIN_ID'] # if user not admin
-
     if message.text == '/start'
-      start_check = Verification.new.call(client_id: client_id)
-      answer_with_greeting_message unless start_check
-      answer_with_in_progress_notification if start_check == 'in progress'
-      answer_with_accepted_notification if start_check == 'accepted'
+      answer_with_greeting_message unless verification
+      answer_with_in_progress_notification if verification == 'in progress'
+      answer_with_accepted_notification if verification == 'accepted'
     end
 
+    if verification == 'registered'
+      get_name
+    elsif verification == 'name'
+      get_link
+    elsif verification == 'link'
+      puts 'link'
+    end
     #  end
   end
 
