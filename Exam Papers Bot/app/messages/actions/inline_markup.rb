@@ -23,4 +23,9 @@ class MakeInlineMarkup
 
     markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
   end
+
+  def get_board
+    markup = []
+    markup = Telegram::Bot::Types::ReplyKyboardMarkup.new(keyboard: @inline_items)
+  end
 end
