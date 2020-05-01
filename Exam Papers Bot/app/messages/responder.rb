@@ -22,7 +22,7 @@ class MessageResponder
     respond(client_id)
   end
 
-  def respond(client_id)
+  def respond(_client_id)
     #  if client_id != ENV['ADMIN_ID'] # if user not admin
     if user_input == '/start'
       answer_with_greeting_message unless verification
@@ -38,8 +38,6 @@ class MessageResponder
       get_subjects
     when 'subjects'
       get_photo
-    when 'photo'
-      show_request
     end
     #  end
   end
@@ -62,7 +60,7 @@ class MessageResponder
   end
 
   def send_photo(caption, photo, reply_markup)
-    SendPhoto.new.call(bot: bot, chat: message.chat,photo: photo, caption: caption, reply_markup: reply_markup)
+    SendPhoto.new.call(bot: bot, chat: message.chat, photo: photo, caption: caption, reply_markup: reply_markup)
   end
 end
 

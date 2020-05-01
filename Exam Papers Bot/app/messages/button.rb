@@ -13,10 +13,16 @@ class MessageButton < MessageResponder
 
   def respond(client_id)
     if message.data == 'Start'
-      db = Database.new(id:client_id, status: 'registered').registrate
+      db = Database.new(id: client_id, status: 'registered').registrate
       edit_buttoned_text(my_text.reply('greeting_first_time_user'))
-      puts("Start pressed")
+      puts('Start pressed')
       answer_with_message(my_text.reply('get_user_info_name'))
+    elsif message.data == 'Send'
+      answer_with_message(my_text.reply('request_sent'))
+      Database.new(id: client_id, status: 'in progress').update_data
+    elsif message.data == 'Retry'
+      answer_with_message(my_text.reply('request_retry'))
+      Database.new(id: client_id).delete_user_progress
     end
   end
 
