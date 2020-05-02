@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './messages/actions/get_membership_status.rb'
+
 class Check
   MAX_SUBJECTS = 6
   def name(name)
@@ -9,7 +11,7 @@ class Check
   end
 
   def membership(link)
-    link != 'false'
+    CheckId.new(link: link).get_membership_info
   end
 
   def each_subject(input)
