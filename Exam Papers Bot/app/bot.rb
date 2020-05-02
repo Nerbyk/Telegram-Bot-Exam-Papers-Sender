@@ -9,6 +9,7 @@ require './messages/admin_responder.rb'
 require './messages/admin_buttons.rb'
 Dotenv.load('./.env')
 prs_log = Logger.new('prs_error.log', 'monthly')
+user_log = Logger.new('user_input.log', 'monthly')
 Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
   bot.listen do |message|
     begin
@@ -27,6 +28,7 @@ Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
       message_responder = AdminResponder.new
       end
       message_responder.call(bot: bot, message: message, user_input: message.text)
+      user_log.debug("User name = #{message.from.username}, message = #{message.text}")
      end
     rescue Exception => e
       bot.api.send_message(chat_id: message.from.id, text: 'Пожалуйста введите данные требуемого формата.')
