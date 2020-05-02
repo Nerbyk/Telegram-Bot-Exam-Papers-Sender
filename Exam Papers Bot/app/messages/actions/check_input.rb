@@ -3,15 +3,22 @@
 require './messages/actions/get_membership_status.rb'
 
 class Check
+  attr_reader :bot, :client_id
+  def initialize(bot: nil, client_id: nil)
+    @bot        = bot
+    @client_id  = client_id
+  end
+
   MAX_SUBJECTS = 6
   def name(name)
     return false if name.split(' ').length > 2 || name.split.length == 1
-
     true
   end
 
   def membership(link)
-    CheckId.new(link: link).get_membership_info
+    vk_status = CheckId.new(link: link).get_membership_info
+    telegram_status = CheckStatus.new(bot: bot, client_id: client_id).get_membership_status
+    vk_status && telegram_status ? true : false
   end
 
   def each_subject(input)

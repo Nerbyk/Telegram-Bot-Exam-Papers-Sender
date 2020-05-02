@@ -11,7 +11,7 @@ module RequestMethods
   end
 
   def get_link
-    if !Check.new.membership(user_input)
+    if !Check.new(bot: bot, client_id: client_id).membership(user_input)
       markup = MakeInlineMarkup.new(['Группа ВК', 'https://vk.com/pozor.brno'], ['Telegram Канал', 'https://t.me/pozor_brno']).get_link
       answer_with_message(my_text.reply('get_user_info_link_error'), markup)
     else

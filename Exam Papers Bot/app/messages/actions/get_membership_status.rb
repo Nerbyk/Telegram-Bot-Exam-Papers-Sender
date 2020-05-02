@@ -1,5 +1,4 @@
 
-
 require "requests/sugar"
 require "dotenv"
 Dotenv.load('./.env')
@@ -19,7 +18,7 @@ class CheckId
   end
 
   def extraction
-
+    p link
     @link = @link.split('/')
     @link = @link.last
     @link.include?('id')? @link.slice!('id') : @link
@@ -45,4 +44,27 @@ class CheckId
     end
   end
 
+end
+
+
+class CheckStatus
+  attr_reader :bot, :client_id, :tg_status
+  def initialize(bot: nil, client_id: nil)
+    @bot        = bot
+    @client_id  = client_id
+    @tg_status  = tg_status
+    status
+  end
+
+  def status
+    @tg_status = bot.api.getChatMember(chat_id: '@pozor_brno', user_id: client_id)
+    @tg_status = @tg_status["result"]
+    @tg_status = @tg_status["status"]
+  end
+
+  def get_membership_status
+    p 'check'
+    p @tg_status
+    @tg_status == 'left' ? false: true
+  end
 end
