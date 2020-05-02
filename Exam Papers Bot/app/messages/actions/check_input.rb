@@ -20,8 +20,12 @@ class Check
   def all_subjects(subjects)
     p subjects
     if subjects.length > MAX_SUBJECTS || subjects.length > subjects.uniq.length
+      p subjects.length
+      p MAX_SUBJECTS
+      subjects.uniq.length
       false
-      end
+    else
     true
+    end
   end
 end
