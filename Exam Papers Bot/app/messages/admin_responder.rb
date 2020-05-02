@@ -36,10 +36,12 @@ class AdminResponder < MessageResponder
     markup = MakeInlineMarkup.new(['Одобрить', 'Accept'], ['Отказать', 'Deny'], ['Забанить','Ban'], ['Вернуться в Главное меню','Menu']).get_markup
     request = Database.new.admin_get_request
     user_name = ''
-    request[:user_name] == nil ? user_name = 'N/A' : user_name = '@' + request[:user_name]
+    p request
     if !request
       answer_with_message("Нет новых заявок")
+      answer_menu
     else
+      request[:user_name] == nil ? user_name = 'N/A' : user_name = '@' + request[:user_name]
       if request[:status] == Status::INSPECTING && request[:status] != []
         answer_with_message(my_text.reply('not_ended_inspection'))
         send_photo("Имя Фамили: #{request[:name]}\nПредметы:#{request[:subjects]}\nTelegram:#{user_name}\nСсылка на ВК: #{request[:link]}", request[:image], markup)
