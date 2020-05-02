@@ -7,7 +7,8 @@ class Status
   LINK        = 'link_step'
   SUBJECTS    = 'subjects_step'
   PHOTO       = 'photo_step'
+  INSPECTING  = 'in inspection'
   def get
-    return [IN_PROGRESS, ACCEPTED, BAN, REGISTERED, NAME, LINK, SUBJECTS, PHOTO]
+    return [IN_PROGRESS, ACCEPTED, BAN, REGISTERED, NAME, LINK, SUBJECTS, PHOTO, INSPECTING]
   end
 end
