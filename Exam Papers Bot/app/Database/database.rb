@@ -84,9 +84,25 @@ class Database
 
   def admin_get_request
     dataset.each do |row|
-      return row if row[:subjects] == Status::IN_PROGRESS
+      if row[:status] == Status::IN_PROGRESS
+        dataset.filter(user_id: row[:user_id]).update(status: Status::INSPECTING)
+        return row
+      elsif  row[:status] == Status::INSPECTING
+        return row
+      end
+
     end
     return false
+  end
+
+  def get_number
+    i = 0
+    dataset.each do |row|
+      i += 1 if row[:status] == Status::IN_PROGRESS && row[:user_id] != id
+      return false if row[:status] == Status::INSPECTING && row[:user_id] == id
+      return i if row[:status] == Status::IN_PROGRESS && row[:user_id] == id
+    end
+    return i
   end
 
 end
