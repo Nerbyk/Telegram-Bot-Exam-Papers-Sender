@@ -5,7 +5,7 @@ module RequestMethods
     if !Check.new.name(user_input)
       answer_with_message(my_text.reply('get_user_info_name_error'))
     else
-      Database.new(id: client_id, status: 'name').update_data(name: user_input)
+      Database.new(id: client_id, status: Status::NAME).update_data(name: user_input)
       answer_with_message(my_text.reply('get_user_info_link'))
     end
   end
@@ -15,7 +15,7 @@ module RequestMethods
       markup = MakeInlineMarkup.new(['Группа ВК', 'https://vk.com/pozor.brno'], ['Telegram Канал', 'https://t.me/pozor_brno']).get_link
       answer_with_message(my_text.reply('get_user_info_link_error'), markup)
     else
-      Database.new(id: client_id, status: 'link').update_data(link: user_input)
+      Database.new(id: client_id, status: Status::LINK).update_data(link: user_input)
       bottom_keyboard = MakeInlineMarkup.new(%w[Химия История Физика], %w[Биология Информатика], %w[Английский География], 'Закончить Ввод').get_board
       answer_with_message(my_text.reply('get_user_info_subjects'), bottom_keyboard)
     end
@@ -37,7 +37,7 @@ module RequestMethods
         Database.new(id: client_id).del_subjects
       else
         markup = MakeInlineMarkup.new(nil).delete_board
-        Database.new(id: client_id, status: 'subjects').update_data
+        Database.new(id: client_id, status:  Status::SUBJECTS).update_data
         answer_with_message(my_text.reply('get_user_info_image'), markup)
       end
     end
@@ -47,7 +47,7 @@ module RequestMethods
     photo = ''
     photo = bot.api.get_updates.dig('result', 0, 'message', 'photo', -1, 'file_id')
     puts photo
-    Database.new(id: client_id, status: 'photo').update_data(photo: photo)
+    Database.new(id: client_id, status:  Status::PHOTO).update_data(photo: photo)
     show_request
   end
 

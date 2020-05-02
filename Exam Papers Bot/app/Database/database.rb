@@ -2,12 +2,13 @@
 
 require 'sqlite3'
 require 'sequel'
-
+require './messages/status_constants.rb'
 class Database
-  attr_reader :db, :id, :dataset, :table, :status
-  def initialize(id: nil, status: nil)
+  attr_reader :db, :id, :dataset, :table, :status, :user_name
+  def initialize(id: nil, status: nil, user_name: nil)
     @id         = id.to_s
     @status     = status
+    @user_name  = user_name
     @table      = :user_details
     @db         = Sequel.sqlite('./Database/user_details.db')
     @dataset    = create
@@ -17,6 +18,7 @@ class Database
     db.create_table? table do
       primary_key :id
       String :user_id
+      String :user_name
       String :name
       String :link
       String :subjects
@@ -27,24 +29,17 @@ class Database
   end
 
   def registrate
-    dataset.insert(user_id: id, status: status) unless verificate
+    dataset.insert(user_id: id, status: status, user_name: user_name) unless verificate
     puts('already registred') if verificate
   end
 
   def verificate
     dataset.each do |row|
-      if row.values[1] == id && row.values[6] == 'in progress'
-        return row.values[6]
+      if row[:user_id] == id && Status.new.get.include?(row[:status])
+        return row[:status]
+      else
+        true
       end
-      return row.values[6] if row.values[1] == id && row.values[6] == 'accepted'
-      if row.values[1] == id && row.values[6] == 'registered'
-        return row.values[6]
-      end
-      return row.values[6] if row.values[1] == id && row.values[6] == 'name'
-      return row.values[6] if row.values[1] == id && row.values[6] == 'link'
-      return row.values[6] if row.values[1] == id && row.values[6] == 'subjects'
-      return row.values[6] if row.values[1] == id && row.values[6] == 'photo'
-      return true if row.values[1] == id && row.values[6].nil?
     end
     false
   end
@@ -59,7 +54,7 @@ class Database
   def set_subjects(subjects:)
     arr = []
     dataset.each do |row|
-      arr << row.values[4] if row.values[1] == id && !row.values[4].nil?
+      arr << row[:subjects] if row[:user_id] == id && !row[:subjects].nil?
     end
     arr << subjects
     dataset.filter(user_id: id).update(subjects: arr.join(' '))
@@ -68,7 +63,7 @@ class Database
   def get_subjects
     arr = String.new
     dataset.each do |row|
-      arr = row.values[4] if row.values[1] == id
+      arr = row[:subjects] if row[:user_id] == id
     end
     arr.split(' ')
   end
@@ -79,11 +74,19 @@ class Database
 
   def get_request
     dataset.each do |row|
-      return row if row.values[1] == id
+      return row if row[:user_id] == id
     end
   end
 
   def delete_user_progress
     dataset.filter(user_id: id).delete
   end
+
+  def admin_get_request
+    dataset.each do |row|
+      return row if row[:subjects] == Status::IN_PROGRESS
+    end
+    return false
+  end
+
 end

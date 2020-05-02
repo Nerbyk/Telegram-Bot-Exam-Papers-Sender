@@ -5,9 +5,8 @@ require './messages/actions/get_message_text.rb'
 require './messages/actions/inline_markup.rb'
 require './messages/request_methods.rb'
 require './messages/actions/check_input.rb'
+require './messages/status_constants.rb'
 require './Database/database.rb'
-require 'dotenv'
-Dotenv.load('./.env') # to get admin user_id
 
 class MessageResponder
   attr_reader :bot, :message, :user_input, :my_text, :client_id, :verification, :import_info
@@ -23,23 +22,21 @@ class MessageResponder
   end
 
   def respond(_client_id)
-    #  if client_id != ENV['ADMIN_ID'] # if user not admin
     if user_input == '/start'
       answer_with_greeting_message unless verification
-      answer_with_in_progress_notification if verification == 'in progress'
-      answer_with_accepted_notification if verification == 'accepted'
+      answer_with_in_progress_notification if verification == Status::IN_PROGRESS
+      answer_with_accepted_notification if verification == Status::ACCEPTED
     end
     case verification
-    when 'registered'
+    when Status::REGISTERED
       get_name
-    when 'name'
+    when Status::NAME
       get_link
-    when 'link'
+    when Status::LINK
       get_subjects
-    when 'subjects'
+    when Status::SUBJECTS
       get_photo
     end
-    #  end
   end
 
   def answer_with_greeting_message

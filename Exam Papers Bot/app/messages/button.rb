@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require './messages/actions/get_message_text.rb'
-require './messages/request/get_user_info.rb'
 require './Database/database.rb'
 require './messages/responder.rb'
 
@@ -13,7 +12,7 @@ class MessageButton < MessageResponder
 
   def respond(client_id)
     if message.data == 'Start'
-      db = Database.new(id: client_id, status: 'registered').registrate
+      db = Database.new(id: client_id, status: 'registered', user_name: message.from.username).registrate
       edit_buttoned_text(my_text.reply('greeting_first_time_user'))
       puts('Start pressed')
       answer_with_message(my_text.reply('get_user_info_name'))
