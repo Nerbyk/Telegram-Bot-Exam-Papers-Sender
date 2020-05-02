@@ -6,6 +6,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'telegram-bot-ruby', '~> 0.12.0'
 gem 'sqlite3', '~> 1.4', '>= 1.4.2'
-gem 'vkontakte_api', '~> 1.4'
+gem 'vkontakte_api', '~> 1.4', '>= 1.4.4'
 gem 'dotenv', '~> 2.1', '>= 2.1.1'
 gem 'sequel', '~> 5.31'
+gem 'requests', '~> 1.0'
