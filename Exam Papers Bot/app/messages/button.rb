@@ -26,16 +26,16 @@ class MessageButton < MessageResponder
   end
 
   def edit_buttoned_text(text)
-    EditMessage.new.call(bot: bot, chat: message.message.chat, message_id: message, text: text)
+    EditMessage.new.call(bot: bot, chat: client_id, message_id: message, text: text)
   end
 
   def answer_with_message(text, reply_markup = nil)
-    SendMessage.new.call(bot: bot, chat: message.message.chat, text: text, reply_markup: reply_markup)
+    SendMessage.new.call(bot: bot, chat: client_id, text: text, reply_markup: reply_markup)
   end
 end
 
 class EditMessage
   def call(bot:, chat:, message_id:, text:)
-    bot.api.edit_message_text(chat_id: chat.id, message_id: message_id.message.message_id, text: text)
+    bot.api.edit_message_text(chat_id: chat, message_id: message_id.message.message_id, text: text)
   end
 end
