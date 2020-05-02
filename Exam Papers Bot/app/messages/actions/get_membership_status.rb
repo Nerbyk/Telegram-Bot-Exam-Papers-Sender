@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 
-require "requests/sugar"
-require "dotenv"
+require 'requests/sugar'
+require 'dotenv'
 Dotenv.load('./.env')
 
 token = ENV['VK_TOKEN']
-group_id = 69201889
+group_id = 69_201_889
 v = 5.103
 
 class CheckId
@@ -12,7 +13,7 @@ class CheckId
   def initialize(link:)
     @link     = link
     @token    = ENV['VK_TOKEN']
-    @group_id = 69201889
+    @group_id = 69_201_889
     @v        = 5.103
     extraction
   end
@@ -21,31 +22,31 @@ class CheckId
     p link
     @link = @link.split('/')
     @link = @link.last
-    @link.include?('id')? @link.slice!('id') : @link
+    @link.include?('id') ? @link.slice!('id') : @link
     get_numeric_id unless is_int?
   end
 
   def is_int?
-    true if Int(@link) rescue false
+    true if Int(@link)
+  rescue StandardError
+    false
   end
 
   def get_numeric_id
-    r = Requests.get('https://api.vk.com/method/users.get', params: {'access_token': token, 'v': v, 'user_ids': @link, 'fields': 'id'})
-    vk_id = r.json["response"]
-    @link = vk_id[0]["id"]
+    r = Requests.get('https://api.vk.com/method/users.get', params: { 'access_token': token, 'v': v, 'user_ids': @link, 'fields': 'id' })
+    vk_id = r.json['response']
+    @link = vk_id[0]['id']
   end
 
   def get_membership_info
-    r = Requests.get('https://api.vk.com/method/groups.isMember', params: {'access_token': token, 'v':v, 'group_id': group_id, 'user_id': @link.to_i })
+    r = Requests.get('https://api.vk.com/method/groups.isMember', params: { 'access_token': token, 'v': v, 'group_id': group_id, 'user_id': @link.to_i })
     if r.json['response'] == 1
-      return true
+      true
     elsif r.json['response'] == 0
-      return false
+      false
     end
   end
-
 end
-
 
 class CheckStatus
   attr_reader :bot, :client_id, :tg_status
@@ -58,13 +59,13 @@ class CheckStatus
 
   def status
     @tg_status = bot.api.getChatMember(chat_id: '@pozor_brno', user_id: client_id)
-    @tg_status = @tg_status["result"]
-    @tg_status = @tg_status["status"]
+    @tg_status = @tg_status['result']
+    @tg_status = @tg_status['status']
   end
 
   def get_membership_status
     p 'check'
     p @tg_status
-    @tg_status == 'left' ? false: true
+    @tg_status != 'left'
   end
 end

@@ -1,7 +1,9 @@
-class SendFiles
-attr_reader :bot, :id, :subjects
+# frozen_string_literal: true
 
-  def initialize(bot,id,subjects)
+class SendFiles
+  attr_reader :bot, :id, :subjects
+
+  def initialize(bot, id, subjects)
     @bot        = bot
     @id         = id
     @subjects   = subjects
@@ -11,15 +13,14 @@ attr_reader :bot, :id, :subjects
   def send
     file_ids = FileId.new.get_ids
     subjects.split(' ').each do |subject|
-    send_one_file(file_ids[subject])
-    sleep(3)
-    end 
+      send_one_file(file_ids[subject])
+      sleep(3)
+    end
   end
 
   def send_one_file(document)
     SendFile.new.call(bot: bot, chat: id, document: document)
   end
-
 end
 
 class SendFile
@@ -38,6 +39,6 @@ class FileId
   PHY = 'BQACAgIAAxkBAAIN0l6tBNIRFFbqx6nJgNVrT4R1vAhSAAKgBQACbF5oSWFAYBx6_a2aGQQ'
 
   def get_ids
-    return 'Биология' => BIO, 'География' => GEO, 'Химия' => CHM,'Информатика' => INF,'Английский' => ENG,'История' => HIS,'Физика' => PHY
+    { 'Биология' => BIO, 'География' => GEO, 'Химия' => CHM, 'Информатика' => INF, 'Английский' => ENG, 'История' => HIS, 'Физика' => PHY }
   end
 end

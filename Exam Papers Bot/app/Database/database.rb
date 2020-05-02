@@ -29,7 +29,9 @@ class Database
   end
 
   def registrate
-    dataset.insert(user_id: id, status: status, user_name: user_name) unless verificate
+    unless verificate
+      dataset.insert(user_id: id, status: status, user_name: user_name)
+    end
     puts('already registred') if verificate
   end
 
@@ -87,12 +89,11 @@ class Database
       if row[:status] == Status::IN_PROGRESS
         dataset.filter(user_id: row[:user_id]).update(status: Status::INSPECTING)
         return row
-      elsif  row[:status] == Status::INSPECTING
+      elsif row[:status] == Status::INSPECTING
         return row
       end
-
     end
-    return false
+    false
   end
 
   def get_number
@@ -102,7 +103,6 @@ class Database
       return false if row[:status] == Status::INSPECTING && row[:user_id] == id
       return i if row[:status] == Status::IN_PROGRESS && row[:user_id] == id
     end
-    return i
+    i
   end
-
 end

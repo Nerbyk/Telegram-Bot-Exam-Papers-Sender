@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Status
   IN_PROGRESS = 'in progress'
   ACCEPTED    = 'accepted'
@@ -9,6 +11,6 @@ class Status
   PHOTO       = 'photo_step'
   INSPECTING  = 'in inspection'
   def get
-    return [IN_PROGRESS, ACCEPTED, BAN, REGISTERED, NAME, LINK, SUBJECTS, PHOTO, INSPECTING]
+    [IN_PROGRESS, ACCEPTED, BAN, REGISTERED, NAME, LINK, SUBJECTS, PHOTO, INSPECTING]
   end
 end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require './messages/actions/get_message_text.rb'
-require './messages/actions/inline_markup.rb'
+require './messages/actions/get_message_text.rb'
+require './messages/actions/inline_markup.rb'
 require './messages/responder.rb'
-require './Database/database.rb'
+require './Database/database.rb'
 require './messages/status_constants.rb'
-
+
 class AdminResponder < MessageResponder
   attr_reader :bot, :message, :user_input, :my_text, :client_id
   def call(bot:, message:, user_input:)
@@ -17,15 +17,15 @@ class AdminResponder < MessageResponder
     respond(client_id)
   end
 
-  def respond(client_id)
-      case user_input
-      when '/start'
-        answer_menu
-      when '/inspect'
-        inspect_requests
-      when '/amount'
-        get_amount_of_uninspected
-      end
+  def respond(_client_id)
+    case user_input
+    when '/start'
+      answer_menu
+    when '/inspect'
+      inspect_requests
+    when '/amount'
+      get_amount_of_uninspected
+    end
   end
 
   def answer_menu
@@ -33,15 +33,15 @@ class AdminResponder < MessageResponder
   end
 
   def inspect_requests
-    markup = MakeInlineMarkup.new(['Одобрить', 'Accept'], ['Отказать', 'Deny'], ['Забанить','Ban'], ['Вернуться в Главное меню','Menu']).get_markup
+    markup = MakeInlineMarkup.new(%w[Одобрить Accept], %w[Отказать Deny], %w[Забанить Ban], ['Вернуться в Главное меню', 'Menu']).get_markup
     request = Database.new.admin_get_request
     user_name = ''
     p request
     if !request
-      answer_with_message("Нет новых заявок")
+      answer_with_message('Нет новых заявок')
       answer_menu
     else
-      request[:user_name] == nil ? user_name = 'N/A' : user_name = '@' + request[:user_name]
+      request[:user_name].nil? ? user_name = 'N/A' : user_name = '@' + request[:user_name]
       if request[:status] == Status::INSPECTING && request[:status] != []
         answer_with_message(my_text.reply('not_ended_inspection'))
         send_photo("Имя Фамили: #{request[:name]}\nПредметы:#{request[:subjects]}\nTelegram:#{user_name}\nСсылка на ВК: #{request[:link]}", request[:image], markup)
@@ -53,7 +53,7 @@ class AdminResponder < MessageResponder
 
   def get_amount_of_uninspected
     amount = Database.new.get_number
-    answer_with_message(my_text.reply("amount_message")+"#{amount}")
+    answer_with_message(my_text.reply('amount_message') + amount.to_s)
     answer_menu
   end
 

@@ -21,10 +21,12 @@ class MessageResponder
     respond(client_id)
   end
 
-  def respond(client_id)
+  def respond(_client_id)
     if user_input == '/start'
       answer_with_greeting_message unless verification
-      answer_with_in_progress_notification if verification == Status::IN_PROGRESS
+      if verification == Status::IN_PROGRESS
+        answer_with_in_progress_notification
+      end
       answer_with_accepted_notification if verification == Status::ACCEPTED
       answer_with_banned_message if verification == Status::BAN
     elsif user_input == '/status' && (verification == Status::IN_PROGRESS || verification == Status::INSPECTING)
@@ -61,8 +63,10 @@ class MessageResponder
 
   def answer_with_status
     queue_num = Database.new(id: client_id).get_number
-    answer_with_message(my_text.reply('request_status_not_nil') + "#{queue_num}") if queue_num
-    answer_with_message(my_text.reply('request_status_nil')) if !queue_num
+    if queue_num
+      answer_with_message(my_text.reply('request_status_not_nil') + queue_num.to_s)
+    end
+    answer_with_message(my_text.reply('request_status_nil')) unless queue_num
   end
 
   def answer_with_message(text, reply_markup = nil)

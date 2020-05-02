@@ -37,7 +37,7 @@ module RequestMethods
         Database.new(id: client_id).del_subjects
       else
         markup = MakeInlineMarkup.new(nil).delete_board
-        Database.new(id: client_id, status:  Status::SUBJECTS).update_data
+        Database.new(id: client_id, status: Status::SUBJECTS).update_data
         answer_with_message(my_text.reply('get_user_info_image'), markup)
       end
     end
@@ -47,7 +47,7 @@ module RequestMethods
     photo = ''
     photo = bot.api.get_updates.dig('result', 0, 'message', 'photo', -1, 'file_id')
     puts photo
-    Database.new(id: client_id, status:  Status::PHOTO).update_data(photo: photo)
+    Database.new(id: client_id, status: Status::PHOTO).update_data(photo: photo)
     show_request
   end
 

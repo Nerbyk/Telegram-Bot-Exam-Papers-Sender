@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require './messages/admin_responder.rb'
 require './messages/files_to_send/send_files.rb'
-
 
 class AdminButton < AdminResponder
   attr_reader :bot, :message, :user_input, :my_text, :client_id
   def call(bot:, message:, user_input:)
     super
   end
-  def respond(client_id)
+
+  def respond(_client_id)
     case message.data
     when 'Accept'
       request = Database.new.admin_get_request
@@ -32,5 +34,4 @@ class AdminButton < AdminResponder
       answer_menu
     end
   end
-
 end

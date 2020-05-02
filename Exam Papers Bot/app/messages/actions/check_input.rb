@@ -12,6 +12,7 @@ class Check
   MAX_SUBJECTS = 6
   def name(name)
     return false if name.split(' ').length > 2 || name.split.length == 1
+
     true
   end
 
@@ -34,7 +35,7 @@ class Check
       subjects.uniq.length
       false
     else
-    true
+      true
     end
   end
 end
