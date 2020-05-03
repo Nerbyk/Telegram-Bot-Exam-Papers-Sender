@@ -13,20 +13,22 @@ class MessageButton < MessageResponder
   def respond(client_id)
     if message.data == 'Start'
       db = Database.new(id: client_id, status: 'registered', user_name: message.from.username).registrate
-      edit_buttoned_text(my_text.reply('greeting_first_time_user'))
+      edit_buttoned_text
       puts('Start pressed')
       answer_with_message(my_text.reply('get_user_info_name'))
     elsif message.data == 'Send'
       answer_with_message(my_text.reply('request_sent'))
       Database.new(id: client_id, status: 'in progress').update_data
+      edit_buttoned_text
     elsif message.data == 'Retry'
       answer_with_message(my_text.reply('request_retry'))
       Database.new(id: client_id).delete_user_progress
+      edit_buttoned_text
     end
   end
 
-  def edit_buttoned_text(text)
-    EditMessage.new.call(bot: bot, chat: client_id, message_id: message, text: text)
+  def edit_buttoned_text
+    EditMarkup.new.call(bot: bot, chat: client_id, message_id: message)
   end
 
   def answer_with_message(text, reply_markup = nil)
@@ -34,8 +36,8 @@ class MessageButton < MessageResponder
   end
 end
 
-class EditMessage
-  def call(bot:, chat:, message_id:, text:)
-    bot.api.edit_message_text(chat_id: chat, message_id: message_id.message.message_id, text: text)
+class EditMarkup
+  def call(bot:, chat:, message_id:)
+    bot.api.edit_message_reply_markup(chat_id: chat, message_id: message_id.message.message_id)
   end
 end

@@ -54,7 +54,7 @@ module RequestMethods
   def show_request
     data_hash = Database.new(id: client_id).get_request
     puts('show_request')
-    markup = MakeInlineMarkup.new(['Отправить заявке', 'Send'], ['Заполнить заного', 'Retry']).get_markup
+    markup = MakeInlineMarkup.new(['Отправить заявку', 'Send'], ['Заполнить заново', 'Retry']).get_markup
     send_photo("Имя и Фамилия: #{data_hash[:name]}\nПредметы: #{data_hash[:subjects]}\n", data_hash[:image], markup)
   end
 end

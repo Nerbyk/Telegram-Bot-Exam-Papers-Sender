@@ -17,6 +17,8 @@ class Check
   end
 
   def membership(link)
+    return false unless link.include?('vk')
+
     vk_status = CheckId.new(link: link).get_membership_info
     telegram_status = CheckStatus.new(bot: bot, client_id: client_id).get_membership_status
     vk_status && telegram_status ? true : false
