@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+
+
 module RequestMethods
   def get_name
     if !Check.new.name(user_input)
@@ -58,3 +60,4 @@ module RequestMethods
     send_photo("Имя и Фамилия: #{data_hash[:name]}\nПредметы: #{data_hash[:subjects]}\n", data_hash[:image], markup)
   end
 end
+

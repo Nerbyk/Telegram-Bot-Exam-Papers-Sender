@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require './messages/actions/get_message_text.rb'
-require './messages/actions/inline_markup.rb'
+require './messages/actions/get_message_text.rb'
+require './messages/actions/inline_markup.rb'
 require './messages/responder.rb'
-require './Database/database.rb'
+require './db/db.rb'
 require './messages/status_constants.rb'
-
+
 class AdminResponder < MessageResponder
   attr_reader :bot, :message, :user_input, :my_text, :client_id
   def call(bot:, message:, user_input:)
@@ -25,6 +25,8 @@ class AdminResponder < MessageResponder
       inspect_requests
     when '/amount'
       get_amount_of_uninspected
+    else
+      bot.api.send_message(chat_id: message.from.id, text: message.message_id.to_s)
     end
   end
 
@@ -33,22 +35,43 @@ class AdminResponder < MessageResponder
   end
 
   def inspect_requests
-    markup = MakeInlineMarkup.new(%w[Одобрить Accept], %w[Отказать Deny], %w[Забанить Ban], ['Вернуться в Главное меню', 'Menu']).get_markup
-    request = Database.new.admin_get_request
-    user_name = ''
-    p request
-    if !request
-      answer_with_message('Нет новых заявок')
-      answer_menu
-    else
-      request[:user_name].nil? ? user_name = 'N/A' : user_name = '@' + request[:user_name]
-      if request[:status] == Status::INSPECTING && request[:status] != []
-        answer_with_message(my_text.reply('not_ended_inspection'))
-        send_photo("Имя Фамили: #{request[:name]}\nПредметы:#{request[:subjects]}\nTelegram:#{user_name}\nСсылка на ВК: #{request[:link]}", request[:image], markup)
-      elsif request[:status] == Status::IN_PROGRESS && request[:status] != []
-        send_photo("Имя Фамили: #{request[:name]}\nПредметы:#{request[:subjects]}\nTelegram:#{user_name}\nСсылка на ВК: #{request[:link]}", request[:image], markup)
+      request = Database.new.admin_get_request
+      markup = MakeInlineMarkup.new(%w[Одобрить Accept], %w[Отказать Deny], %w[Забанить Ban], ['Вернуться в Главное меню', 'Menu']).get_markup
+
+      # return unless request[:status] != []
+
+      if !request
+        answer_with_message('Нет новых заявок')
+        answer_menu
+      else
+        user_name = if request[:user_name].nil?
+                      'N/A'
+                    else
+                      "@#{request[:user_name]}"
+        end
+
+        is_inspecting = request[:status] == Status::INSPECTING
+        is_inprogress = request[:status] == Status::IN_PROGRESS
+
+        if is_inspecting
+          answer_with_message(my_text.reply('not_ended_inspection'))
+        end
+
+        if is_inspecting || is_inprogress
+          send_photo("Имя Фамили: #{
+          request[:name]
+        }\nПредметы:#{
+          request[:subjects]
+        }\nTelegram:#{
+          user_name
+        }\nСсылка на ВК: #{
+          request[:link]
+        }",
+                    request[:image],
+                    markup)
+        end
+
       end
-    end
   end
 
   def get_amount_of_uninspected

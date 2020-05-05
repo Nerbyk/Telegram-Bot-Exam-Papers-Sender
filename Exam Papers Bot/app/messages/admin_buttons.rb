@@ -42,11 +42,7 @@ class AdminButton < AdminResponder
   def edit_buttoned_text
     EditMarkup.new.call(bot: bot, chat: client_id, message_id: message)
   end
-
 end
-
-
-
 
 class EditMarkup
   def call(bot:, chat:, message_id:)

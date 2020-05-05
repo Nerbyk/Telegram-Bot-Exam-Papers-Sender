@@ -10,7 +10,9 @@ class Status
   SUBJECTS    = 'subjects_step'
   PHOTO       = 'photo_step'
   INSPECTING  = 'in inspection'
+  
   def get
     [IN_PROGRESS, ACCEPTED, BAN, REGISTERED, NAME, LINK, SUBJECTS, PHOTO, INSPECTING]
   end
 end
+

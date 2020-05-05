@@ -63,7 +63,7 @@ DEPENDENCIES
   requests (~> 1.0)
   sequel (~> 5.31)
   sqlite3 (~> 1.4, >= 1.4.2)
-  telegram-bot-ruby (~> 0.12.0)
+  telegram-bot-ruby
   vkontakte_api (~> 1.4, >= 1.4.4)
 
 BUNDLED WITH

@@ -12,16 +12,16 @@ class Check
   MAX_SUBJECTS = 6
   def name(name)
     return false if name.split(' ').length > 2 || name.split.length == 1
-
     true
   end
 
   def membership(link)
     return false unless link.include?('vk')
-
+    return false if link.include?('nerby1') || link.include?('48857393') # if my link was passed
     vk_status = CheckId.new(link: link).get_membership_info
     telegram_status = CheckStatus.new(bot: bot, client_id: client_id).get_membership_status
-    vk_status && telegram_status ? true : false
+    telegram_status  && vk_status ? true : false
+    
   end
 
   def each_subject(input)
@@ -30,10 +30,7 @@ class Check
   end
 
   def all_subjects(subjects)
-    p subjects
     if subjects.length > MAX_SUBJECTS || subjects.length > subjects.uniq.length
-      p subjects.length
-      p MAX_SUBJECTS
       subjects.uniq.length
       false
     else
@@ -41,3 +38,4 @@ class Check
     end
   end
 end
+

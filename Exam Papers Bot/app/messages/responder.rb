@@ -6,7 +6,7 @@ require './messages/actions/inline_markup.rb'
 require './messages/request_methods.rb'
 require './messages/actions/check_input.rb'
 require './messages/status_constants.rb'
-require './Database/database.rb'
+require './db/db.rb'
 
 class MessageResponder
   attr_reader :bot, :message, :user_input, :my_text, :client_id, :verification, :import_info
