@@ -19,7 +19,6 @@ class CheckId
   end
 
   def extraction
-    p link
     @link = @link.split('/')
     @link = @link.last
     @link.include?('id') ? @link.slice!('id') : @link
@@ -64,8 +63,6 @@ class CheckStatus
   end
 
   def get_membership_status
-    p 'check'
-    p @tg_status
     @tg_status != 'left'
   end
 end
