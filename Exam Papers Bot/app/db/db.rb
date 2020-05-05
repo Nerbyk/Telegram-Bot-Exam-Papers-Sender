@@ -4,7 +4,7 @@
 
 
 
-require 'sqlite3'
+require 'pg'
 require 'sequel'
 require './messages/status_constants.rb'
 class Database
@@ -14,7 +14,7 @@ class Database
     @status     = status
     @user_name  = user_name
     @table      = :user_details
-    @db         = Sequel.sqlite('./db/user_input.db')
+    @db         = Sequel.connect(ENV['DATABASE_URL'])
     @dataset    = create
   end
 

@@ -48,14 +48,12 @@ module RequestMethods
   def get_photo
     photo = ''
     photo = bot.api.get_updates.dig('result', 0, 'message', 'photo', -1, 'file_id')
-    puts photo
     Database.new(id: client_id, status: Status::PHOTO).update_data(photo: photo)
     show_request
   end
 
   def show_request
     data_hash = Database.new(id: client_id).get_request
-    puts('show_request')
     markup = MakeInlineMarkup.new(['Отправить заявку', 'Send'], ['Заполнить заново', 'Retry']).get_markup
     send_photo("Имя и Фамилия: #{data_hash[:name]}\nПредметы: #{data_hash[:subjects]}\n", data_hash[:image], markup)
   end

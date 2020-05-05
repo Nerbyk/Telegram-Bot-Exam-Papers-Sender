@@ -19,8 +19,9 @@ class Check
     return false unless link.include?('vk')
     return false if link.include?('nerby1') || link.include?('48857393') # if my link was passed
     vk_status = CheckId.new(link: link).get_membership_info
-    telegram_status = CheckStatus.new(bot: bot, client_id: client_id).get_membership_status
-    telegram_status  && vk_status ? true : false
+    # telegram_status = CheckStatus.new(bot: bot, client_id: client_id).get_membership_status
+    # telegram_status  && 
+    vk_status ? true : false
     
   end
 
