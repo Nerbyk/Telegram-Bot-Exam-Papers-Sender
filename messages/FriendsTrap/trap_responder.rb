@@ -14,11 +14,12 @@ end
 
 class TrapResponder
   attr_reader :bot, :message, :user_input, :client_id
-  def call(bot:, message:, user_input:)
+  def call(bot:, message:, user_input:, db: nil)
     @bot         = bot
     @message     = message
     @user_input  = user_input
     @client_id   = message.from.id
+    @db          = db
     respond(client_id)
   end
 
