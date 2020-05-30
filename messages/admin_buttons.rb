@@ -25,7 +25,10 @@ class AdminButton < AdminResponder
       edit_buttoned_text
       request = db.admin_get_request
       user_id = request[:user_id].to_i
+      answer_with_message('Введите причину отказа')
+      reason = deny_msg
       answer_to_client(user_id, my_text.reply('inspect_deny_message_to_user'))
+      answer_to_client(user_id, reason)
       db.call(id: user_id.to_s)
       db.delete_user_progress
       inspect_requests
@@ -45,6 +48,13 @@ class AdminButton < AdminResponder
   def edit_buttoned_text
     EditMarkup.new.call(bot: bot, chat: client_id, message_id: message)
   end
+  
+  def deny_msg
+    bot.listen do |message|
+      return message.text if message.text
+    end
+  end
+  
 end
 
 class EditMarkup
