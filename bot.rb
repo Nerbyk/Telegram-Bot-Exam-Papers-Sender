@@ -6,7 +6,6 @@ require './messages/responder.rb'
 require './messages/button.rb'
 require './messages/admin_responder.rb'
 require './messages/admin_buttons.rb'
-require './messages/FriendsTrap/trap_responder.rb'
 require './db/db.rb'
 require 'telegram/bot'
 Dotenv.load('./.env')
@@ -29,8 +28,6 @@ Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
          else
            message_responder = if message.from.id.to_s == ENV['ADMIN_ID']
                                  AdminResponder.new
-                               elsif Ids.new.get.include?(message.from.id) # responder for my friend, who would like to test my bot
-                                 TrapResponder.new
                                else
                                  MessageResponder.new
                                end
