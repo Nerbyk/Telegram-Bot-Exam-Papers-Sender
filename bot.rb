@@ -35,7 +35,7 @@ Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
            user_log.debug("User id = #{message.from.id} User name = #{message.from.username}, message = #{message.text}")
          end
     rescue StandardError => e
-      bot.api.send_message(chat_id: message.from.id, text: 'Пожалуйста введите данные требуемого формата.')
+      bot.api.send_message(chat_id: message.from.id, text: "Пожалуйста введите данные требуемого формата.\n\nПри возникновении трудностей писать сюда - @nerby1")
       prs_log.error "User_id #{message.from.id}, User name = #{message.from.username} Error = #{e}"
       p e
        end
